@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-d&t-)%0zrdqpsou4*c_6^#0(%g0_hb@fj*_u&pdd)ua+%@p0pu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['budget_api.onrender.com', 'budget-api-1vmx.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['budget_api.onrender.com', 'budget-api-1vmx.onrender.com','budget-app-sl78.onrender.com', 'localhost']
 
 
 # Application definition
