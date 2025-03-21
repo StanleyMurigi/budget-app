@@ -1,13 +1,22 @@
 from django import forms
 from .models import Budget, Category, Usage
 
+# class BudgetForm(forms.ModelForm):
+#     class Meta:
+#         model = Budget
+#         fields = ['name', 'amount', 'start_date', 'end_date']
+#         widgets = {
+#             'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+#             'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+#         }
+
 class BudgetForm(forms.ModelForm):
     class Meta:
         model = Budget
-        fields = ['name', 'amount', 'start_date', 'end_date']
+        fields = ["name", "amount", "start_date", "end_date"]
         widgets = {
-            'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            "start_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "end_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
         }
 
 class CategoryForm(forms.ModelForm):
@@ -28,3 +37,7 @@ class UsageForm(forms.ModelForm):
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
             'discount': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+
+
+

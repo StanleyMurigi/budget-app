@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Manage Categories</h1>
+
+    <!-- If viewing all budgets -->
+    {% if budgets %}
+        <h2>All Budgets</h2>
+        {% for budget in budgets %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ budget.name }}</h5>
+                    <p>Amount: {{ budget.amount }} | Start: {{ budget.start_date }} | End: {{ budget.end_date }}</p>
+                    <a href="{% url 'category_list' budget.id %}" class="btn btn-primary">View Categories</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- If viewing a specific budget -->
+    {% if budget %}
+        <h2>{{ budget.name }} - Categories</h2>
+        <a href="{% url 'category-create' budget.id %}" class="btn btn-success mb-3">+ Add Category</a>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Allocated Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td>{{ category.name }}</td>
+                            <td>{{ category.amount }}</td>
+                            <td>
+                                <a href="{% url 'category_update' category.id %}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{% url 'category_delete' category.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">No categories found. Click "+ Add Category" to create one.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

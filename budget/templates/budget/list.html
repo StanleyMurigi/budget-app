@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
@@ -24,22 +23,20 @@
                     <th>End Date</th>
                 </tr>
             </thead>
-            {% if budgets.exists %}
-    <tbody>
-        {% for budget in budgets.all %}
-        <tr>
-            <td><a href="{% url 'category_list' budget.id %}">{{ budget.name }}</a></td>
-            <td>{{ budget.amount }}</td>
-            <td>{{ budget.start_date }}</td>
-            <td>{{ budget.end_date }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-{% else %}
-    <tr>
-        <td colspan="4" class="text-center">No budgets found. Click "+ Add Budget" to create one.</td>
-    </tr>
-{% endif %}
+            <tbody>
+                {% for budget in budgets %}
+                <tr>
+                    <td><a href="{% url 'category_list' budget.id %}">{{ budget.name }}</a></td>
+                    <td>{{ budget.amount }}</td>
+                    <td>{{ budget.start_date }}</td>
+                    <td>{{ budget.end_date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No budgets found. Click "+ Add Budget" to create one.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </div>
