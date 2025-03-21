@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
+#import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-d&t-)%0zrdqpsou4*c_6^#0(%g0_hb@fj*_u&pdd)ua+%@p0pu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['budget_api.onrender.com', 'budget-api-1vmx.onrender.com','budget-app-sl78.onrender.com', 'localhost']
-
+ALLOWED_HOSTS = ['*']
+#'budget_api.onrender.com', 'budget-api-1vmx.onrender.com','budget-app-sl78.onrender.com', 'localhost'
 
 # Application definition
 
@@ -78,7 +78,7 @@ ROOT_URLCONF = 'budget_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'budget/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -98,9 +98,12 @@ WSGI_APPLICATION = 'budget_api.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    "default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
-
+#"default": dj_database_url.config(default=os.getenv("DATABASE_URL"))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -120,6 +123,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_URL = '/users/login/'  # Redirect for login
+LOGIN_REDIRECT_URL = '/budget/'  # Redirect after login
+LOGOUT_REDIRECT_URL = '/users/login/'  # Redirect after logout
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # Internationalization

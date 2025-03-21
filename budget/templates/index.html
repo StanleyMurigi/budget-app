@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center">
+    <h1 class="my-4">Welcome to Budget Manager</h1>
+    <p class="lead">Easily manage your budgets, track your expenses, and stay on top of your finances.</p>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Budgets</h5>
+                    <p class="card-text">Create and track your budgets efficiently.</p>
+                    <a href="{% url 'manage-budgets' %}" class="btn btn-primary">View Budgets</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Categories</h5>
+                    <p class="card-text">Organize your expenses into meaningful categories.</p>
+                    <a href="/categories/" class="btn btn-primary">View Categories</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Track Expenses</h5>
+                    <p class="card-text">Monitor your spending and stay within your budget.</p>
+                    <a href="/expenses/" class="btn btn-primary">View Expenses</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
