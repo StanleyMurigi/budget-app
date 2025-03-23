@@ -2,37 +2,117 @@
 
 {% block content %}
 <div class="container text-center">
-    <h1 class="my-4">Welcome to Budget Manager</h1>
-    <p class="lead">Easily manage your budgets, track your expenses, and stay on top of your finances.</p>
+    <h1 class="my-4 fw-bold text-primary">Welcome to Budget Manager</h1>
+    <p class="lead text-muted">Easily manage your budgets, track your expenses, and stay on top of your finances.</p>
 
-    <div class="row mt-4">
+    <!-- Feature Cards -->
+    <div class="row mt-5">
         <div class="col-md-4">
-            <div class="card">
+            <div class="card shadow-lg border-0 rounded-4 p-3 hover-effect">
                 <div class="card-body">
-                    <h5 class="card-title">Manage Budgets</h5>
-                    <p class="card-text">Create and track your budgets efficiently.</p>
-                    <a href="{% url 'manage-budgets' %}" class="btn btn-primary">View Budgets</a>
+                    <i class="fas fa-wallet fa-3x text-primary"></i>
+                    <h5 class="card-title mt-3 fw-bold">Manage Budgets</h5>
+                    <p class="card-text text-muted">Create and track your budgets efficiently.</p>
+                    <a href="{% url 'manage-budgets' %}" class="btn btn-outline-primary w-100">View Budgets</a>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card">
+            <div class="card shadow-lg border-0 rounded-4 p-3 hover-effect">
                 <div class="card-body">
-                    <h5 class="card-title">Manage Categories</h5>
-                    <p class="card-text">Organize your expenses into meaningful categories.</p>
-                    <a href="{% url 'category_list' %}" class="btn btn-primary">View Categories</a>
+                    <i class="fas fa-list-alt fa-3x text-success"></i>
+                    <h5 class="card-title mt-3 fw-bold">Manage Categories</h5>
+                    <p class="card-text text-muted">Organize your expenses into meaningful categories.</p>
+                    <a href="{% url 'category_list' %}" class="btn btn-outline-success w-100">View Categories</a>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card">
+            <div class="card shadow-lg border-0 rounded-4 p-3 hover-effect">
                 <div class="card-body">
-                    <h5 class="card-title">Track Expenses</h5>
-                    <p class="card-text">Monitor your spending and stay within your budget.</p>
-                    <a href="{% url 'usage-overview' %}" class="btn btn-primary">View Expenses</a>
+                    <i class="fas fa-chart-line fa-3x text-danger"></i>
+                    <h5 class="card-title mt-3 fw-bold">Track Expenses</h5>
+                    <p class="card-text text-muted">Monitor your spending and stay within your budget.</p>
+                    <a href="{% url 'usage-overview' %}" class="btn btn-outline-danger w-100">View Expenses</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Budget Overview Charts -->
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 p-3">
+                <h3 class="fw-bold text-primary">Budget Allocation</h3>
+                <canvas id="budgetChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 p-3">
+                <h3 class="fw-bold text-danger">Spending Trends</h3>
+                <canvas id="spendingChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Section -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card shadow-lg border-0 p-4">
+                <h3 class="fw-bold text-primary">Why Budgeting is Important</h3>
+                <p class="text-muted">Budgeting helps you control spending, track expenses, and save more money. With a solid budget, you can ensure financial stability and avoid unnecessary debt.</p>
+
+                <h3 class="fw-bold text-success">Best Budgeting Practices</h3>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">✅ Set clear financial goals</li>
+                    <li class="list-group-item">✅ Use the 50/30/20 rule for income allocation</li>
+                    <li class="list-group-item">✅ Track all expenses regularly</li>
+                    <li class="list-group-item">✅ Adjust your budget based on actual spending</li>
+                    <li class="list-group-item">✅ Use budgeting tools like this one to automate tracking</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx1 = document.getElementById('budgetChart').getContext('2d');
+    const budgetChart = new Chart(ctx1, {
+        type: 'pie',
+        data: {
+            labels: ['Rent', 'Food', 'Transport', 'Savings', 'Entertainment'],
+            datasets: [{
+                data: [40, 20, 15, 15, 10],
+                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d']
+            }]
+        }
+    });
+
+    const ctx2 = document.getElementById('spendingChart').getContext('2d');
+    const spendingChart = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            datasets: [{
+                label: 'Monthly Spending',
+                data: [500, 700, 650, 800, 750],
+                borderColor: '#007bff',
+                fill: false
+            }]
+        }
+    });
+</script>
+
+<!-- Custom CSS -->
+<style>
+    .hover-effect {
+        transition: transform 0.3s ease-in-out;
+    }
+    .hover-effect:hover {
+        transform: scale(1.05);
+    }
+</style>
+
 {% endblock %}

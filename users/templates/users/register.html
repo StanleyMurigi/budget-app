@@ -1,13 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Register</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Register</button>
-    </form>
-    <p class="mt-3">Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg p-4 rounded" style="max-width: 450px; width: 100%;">
+        <div class="card-body text-center">
+            <h2 class="fw-bold text-success mb-3">Create Your Account</h2>
+            <p class="text-muted">Join us and start managing your budget effectively.</p>
+
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <small class="text-danger">{{ field.errors|first }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-success w-100">Register</button>
+            </form>
+
+            <p class="mt-3 text-muted">Already have an account?  
+                <a href="{% url 'login' %}" class="text-success fw-bold">Login here</a>.
+            </p>
+        </div>
+    </div>
 </div>
+
+<!-- Custom CSS -->
+<style>
+    body {
+        background: linear-gradient(to right, #43cea2, #185a9d);
+    }
+    .card {
+        background: white;
+        border: none;
+        border-radius: 12px;
+    }
+    .btn-success {
+        background: #43cea2;
+        border: none;
+    }
+    .btn-success:hover {
+        background: #36a488;
+    }
+</style>
 {% endblock %}
