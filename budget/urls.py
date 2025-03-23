@@ -12,5 +12,10 @@ urlpatterns = [
     path("categories/", category_list, name="category_list"),
     path("categories/<int:budget_id>/", category_list, name="category_list"),
     path("categories/add/<int:budget_id>/", category_create, name="category-create"),
+    path('categories/update/<int:pk>/', views.category_update, name='category_update'),
+    path('categories/delete/<int:pk>/', views.category_delete, name='category_delete'),
+    path("usage/<int:category_id>/", views.usage_list, name="usage-list"),
+    path("usage/add/<int:category_id>/", views.usage_create, name="usage-create"),
+    path("usage/", views.usage_overview, name="usage-overview"),  # View all categories + usage
 ]
 

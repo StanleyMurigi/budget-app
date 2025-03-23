@@ -17,8 +17,8 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'manage-budgets' %}">Budgets</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/categories/">Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/expenses/">Expenses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'category_list' %}">Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'usage-overview' %}">Expenses</a></li>
                     <li class="nav-item"><a class="nav-link text-danger" href="{% url 'logout' %}">Logout</a></li>
                 </ul>
             </div>

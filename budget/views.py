@@ -87,7 +87,24 @@ def category_list(request, budget_id=None):
 
     return render(request, "budget/category_list.html", context)
 
+
 @login_required
+def category_create(request, budget_id):
+    """Create a new category for a specific budget"""
+    budget = get_object_or_404(Budget, id=budget_id, user=request.user)
+
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.budget = budget  # Assign the selected budget
+            category.user = request.user
+            category.save()
+            return redirect("category_list", budget_id=budget.id)  # Redirect to categories for this budget
+    else:
+        form = CategoryForm()
+
+    return render(request, "budget/category_form.html", {"form": form, "budget": budget})
 
     
 @login_required
@@ -97,7 +114,7 @@ def category_update(request, pk):
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-            return redirect('category-list')
+            return redirect('category_list')
     else:
         form = CategoryForm(instance=category)
     return render(request, 'budget/category_form.html', {'form': form})
@@ -107,9 +124,45 @@ def category_delete(request, pk):
     category = get_object_or_404(Category, pk=pk, user=request.user)
     if request.method == 'POST':
         category.delete()
-        return redirect('category-list')
+        return redirect('category_list')
     return render(request, 'budget/category_confirm_delete.html', {'object': category})
 
+
+@login_required
+def usage_list(request, category_id):
+    """Display all usage records under a category."""
+    category = get_object_or_404(Category, id=category_id, user=request.user)
+    usage_records = Usage.objects.filter(category=category, user=request.user)
+
+    return render(request, "budget/usage_list.html", {"category": category, "usage_records": usage_records})
+
+
+@login_required
+def usage_create(request, category_id):
+    """Add a new usage record to a category."""
+    category = get_object_or_404(Category, id=category_id, user=request.user)
+
+    if request.method == "POST":
+        form = UsageForm(request.POST)
+        if form.is_valid():
+            usage = form.save(commit=False)
+            usage.category = category
+            usage.user = request.user  # Assign the logged-in user
+            usage.save()
+            return redirect("usage-list", category_id=category.id)
+
+    else:
+        form = UsageForm()
+
+    return render(request, "budget/usage_form.html", {"form": form, "category": category})
+
+
+@login_required
+def usage_overview(request):
+    """Show all categories and their usage records."""
+    categories = Category.objects.filter(user=request.user).prefetch_related("usage")
+    
+    return render(request, "budget/usage_overview.html", {"categories": categories})
 
 
 class BudgetListView(LoginRequiredMixin, ListView):

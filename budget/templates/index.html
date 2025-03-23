@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Manage Categories</h5>
                     <p class="card-text">Organize your expenses into meaningful categories.</p>
-                    <a href="/categories/" class="btn btn-primary">View Categories</a>
+                    <a href="{% url 'category_list' %}" class="btn btn-primary">View Categories</a>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Track Expenses</h5>
                     <p class="card-text">Monitor your spending and stay within your budget.</p>
-                    <a href="/expenses/" class="btn btn-primary">View Expenses</a>
+                    <a href="{% url 'usage-overview' %}" class="btn btn-primary">View Expenses</a>
                 </div>
             </div>
         </div>

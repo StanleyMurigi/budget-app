@@ -22,7 +22,7 @@ class BudgetForm(forms.ModelForm):
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['budget', 'name']
+        fields = ['budget', 'name', 'allocated_amount']
         widgets = {
             'budget': forms.Select(attrs={'class': 'form-control'}),
         }

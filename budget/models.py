@@ -27,7 +27,7 @@ class Category(models.Model):
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE, related_name="categories")
     name = models.CharField(max_length=255)  # Category name (e.g., "Food", "Rent")
     created_at = models.DateTimeField(auto_now_add=True)
-
+    allocated_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Money allocated to this category
     class Meta:
         unique_together = ["user", "name"]
 
@@ -49,6 +49,7 @@ class BudgetAllocation(models.Model):
 
 class Usage(models.Model):
     """model for used amounts mapped to different categories"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="usage")
     used_for = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)

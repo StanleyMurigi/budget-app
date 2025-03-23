@@ -33,10 +33,29 @@
                     </tr>
                 </thead>
                 <tbody>
+                <tbody>
                     {% for category in categories %}
                         <tr>
                             <td>{{ category.name }}</td>
-                            <td>{{ category.amount }}</td>
+                            <td>{{ category.allocated_amount }}</td>
+                            <td>
+                                <a href="{% url 'category_update' category.id %}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{% url 'category_delete' category.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                <a href="{% url 'usage-list' category.id %}" class="btn btn-outline-primary btn-sm">
+                                    View Usage
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">No categories found. Click "+ Add Category" to create one.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                    {% for category in categories %}
+                        <tr>
+                            <td>{{ category.name }}</td>
+                            <td>{{ category.allocated_amount }}</td>
                             <td>
                                 <a href="{% url 'category_update' category.id %}" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="{% url 'category_delete' category.id %}" class="btn btn-danger btn-sm">Delete</a>

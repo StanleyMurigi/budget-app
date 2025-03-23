@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">All Categories & Expenses</h1>
+
+    {% for category in categories %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ category.name }}</h5>
+
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Used For</th>
+                        <th>Amount</th>
+                        <th>Discount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usage in category.usage.all %}
+                    <tr>
+                        <td>{{ usage.used_for }}</td>
+                        <td>{{ usage.amount }}</td>
+                        <td>{{ usage.discount }}</td>
+                        <td>{{ usage.created_at }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No usage records.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="{% url 'usage-list' category.id %}" class="btn btn-primary">View Usage</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

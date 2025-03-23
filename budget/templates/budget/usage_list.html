@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Usage Records for {{ category.name }}</h1>
+
+    <!-- Add New Usage Button -->
+    <div class="mb-3 text-end">
+        <a href="{% url 'usage-create' category.id %}" class="btn btn-success">
+            + Add Usage
+        </a>
+    </div>
+
+    <!-- Display Existing Usage Records -->
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Used For</th>
+                    <th>Amount</th>
+                    <th>Discount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usage in usage_records %}
+                <tr>
+                    <td>{{ usage.used_for }}</td>
+                    <td>{{ usage.amount }}</td>
+                    <td>{{ usage.discount }}</td>
+                    <td>{{ usage.created_at }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No usage records found. Click "+ Add Usage" to create one.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
