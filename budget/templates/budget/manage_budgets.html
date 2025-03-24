@@ -1,0 +1,46 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Manage Your Budget</h1>
+    <p>Here you can create, edit, and track your budgets efficiently.</p>
+
+    <!-- Add New Budget Button -->
+    <div class="mb-3 text-end">
+        <a href="{% url 'budget-create' %}" class="btn btn-success">
+            + Add Budget
+        </a>
+    </div>
+
+    <!-- Display Existing Budgets -->
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            {% if budgets.exists %}
+    <tbody>
+        {% for budget in budgets.all %}
+        <tr>
+            <td><a href="{% url 'category_list' budget.id %}">{{ budget.name }}</a></td>
+            <td>{{ budget.amount }}</td>
+            <td>{{ budget.start_date }}</td>
+            <td>{{ budget.end_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+{% else %}
+    <tr>
+        <td colspan="4" class="text-center">No budgets found. Click "+ Add Budget" to create one.</td>
+    </tr>
+{% endif %}
+        </table>
+    </div>
+</div>
+{% endblock %}
