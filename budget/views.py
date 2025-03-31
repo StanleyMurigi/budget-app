@@ -34,10 +34,16 @@ def index(request):
     return render(request, 'index.html')
 
 # Budgets CRUD
-# @login_required
-# def budget_list(request):
-#     budgets = Budget.objects.filter(user=request.user)
-#     return render(request, 'budget/list.html', {'budgets': budgets})
+@login_required
+def budget_list(request): 
+    """View to display budgets for the logged-in user only."""
+    budgets = Budget.objects.filter(user=request.user)  # Filter by logged-in user
+
+    if not budgets.exists():
+        pass
+       
+
+    return render(request, 'budget/manage_budgets.html', {'budgets': budgets})
 
 @login_required
 def budget_create(request):
@@ -78,11 +84,11 @@ def category_list(request, budget_id=None):
     """View to display budgets and their categories"""
     if budget_id:
         budget = get_object_or_404(Budget, id=budget_id, user=request.user)
-        categories = Category.objects.filter(budget=budget)
+        categories = Category.objects.filter(budget=budget, user=request.user)
         context = {"budget": budget, "categories": categories}
     else:
         budgets = Budget.objects.filter(user=request.user)
-        categories = Category.objects.filter(budget__user=request.user)
+        categories = Category.objects.filter(budget__user=request.user, user=request.user)
         context = {"budgets": budgets, "categories": categories}
 
     return render(request, "budget/category_list.html", context)
@@ -94,7 +100,7 @@ def category_create(request, budget_id):
     budget = get_object_or_404(Budget, id=budget_id, user=request.user)
 
     if request.method == "POST":
-        form = CategoryForm(request.POST)
+        form = CategoryForm(request.POST, user=request.user)
         if form.is_valid():
             category = form.save(commit=False)
             category.budget = budget  # Assign the selected budget
@@ -102,7 +108,7 @@ def category_create(request, budget_id):
             category.save()
             return redirect("category_list", budget_id=budget.id)  # Redirect to categories for this budget
     else:
-        form = CategoryForm()
+        form = CategoryForm(user=request.user)
 
     return render(request, "budget/category_form.html", {"form": form, "budget": budget})
 
@@ -111,12 +117,12 @@ def category_create(request, budget_id):
 def category_update(request, pk):
     category = get_object_or_404(Category, pk=pk, user=request.user)
     if request.method == 'POST':
-        form = CategoryForm(request.POST, instance=category)
+        form = CategoryForm(request.POST, instance=category, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('category_list')
     else:
-        form = CategoryForm(instance=category)
+        form = CategoryForm(instance=category, user=request.user)
     return render(request, 'budget/category_form.html', {'form': form})
 
 @login_required
@@ -125,7 +131,7 @@ def category_delete(request, pk):
     if request.method == 'POST':
         category.delete()
         return redirect('category_list')
-    return render(request, 'budget/category_confirm_delete.html', {'object': category})
+    return render(request, 'budget/category_delete.html', {'object': category})
 
 
 @login_required
@@ -143,7 +149,7 @@ def usage_create(request, category_id):
     category = get_object_or_404(Category, id=category_id, user=request.user)
 
     if request.method == "POST":
-        form = UsageForm(request.POST)
+        form = UsageForm(request.POST, user=request.user)
         if form.is_valid():
             usage = form.save(commit=False)
             usage.category = category
@@ -152,7 +158,7 @@ def usage_create(request, category_id):
             return redirect("usage-list", category_id=category.id)
 
     else:
-        form = UsageForm()
+        form = UsageForm(user=request.user)
 
     return render(request, "budget/usage_form.html", {"form": form, "category": category})
 
@@ -163,63 +169,4 @@ def usage_overview(request):
     categories = Category.objects.filter(user=request.user).prefetch_related("usage")
     
     return render(request, "budget/usage_overview.html", {"categories": categories})
-
-
-class BudgetListView(LoginRequiredMixin, ListView):
-    """View for listing all budgets."""
-    model = Budget
-    template_name = "budget/list.html"
-    context_object_name = "budgets"
-
-    def get_queryset(self):
-       return Budget.objects.filter(user=self.request.user).order_by('-start_date')
-    
-class BudgetCreateView(LoginRequiredMixin, CreateView):
-    """View for creating a new budget."""
-    model = Budget
-    form_class = BudgetForm
-    template_name = "budget/form.html"
-    success_url = reverse_lazy("budget-list")
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user  # Set the logged-in user
-        return super().form_valid(form)
-
-class CategoryListCreateView(generics.ListCreateAPIView):
-    """View for listing and creating categories."""
-    
-    serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        """Return only the categories for the authenticated user."""
-        return Category.objects.filter(user=self.request.user).prefetch_related('usage')
-
-    def perform_create(self, serializer):
-        """Save category for the current user."""
-        serializer.save(user=self.request.user)
-
-class BudgetListCreateView(generics.ListCreateAPIView):
-    """View for listing and creating budgets."""
-    
-    serializer_class = BudgetSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        """Return budgets only for the authenticated user."""
-        return Budget.objects.filter(user=self.request.user)
-
-    def perform_create(self, serializer):
-        """Save budget for the current user."""
-        serializer.save(user=self.request.user)
-
-class BudgetDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """View for retrieving, updating, or deleting a budget."""
-    
-    serializer_class = BudgetSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        """Ensure user can only access their own budgets."""
-        return Budget.objects.filter(user=self.request.user)
 
