@@ -1,15 +1,6 @@
 from django import forms
 from .models import Budget, Category, Usage
 
-# class BudgetForm(forms.ModelForm):
-#     class Meta:
-#         model = Budget
-#         fields = ['name', 'amount', 'start_date', 'end_date']
-#         widgets = {
-#             'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-#             'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-#         }
-
 class BudgetForm(forms.ModelForm):
     class Meta:
         model = Budget
@@ -26,6 +17,12 @@ class CategoryForm(forms.ModelForm):
         widgets = {
             'budget': forms.Select(attrs={'class': 'form-control'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Get the logged-in user
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['budget'].queryset = Budget.objects.filter(user=user)  # Filter dropdown
 
 class UsageForm(forms.ModelForm):
     class Meta:
@@ -38,6 +35,8 @@ class UsageForm(forms.ModelForm):
             'discount': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
-
-
-
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Get the logged-in user
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['category'].queryset = Category.objects.filter(user=user)  # Filter dropdown
