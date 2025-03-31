@@ -1,4 +1,4 @@
-from .models import Budget, Category, BudgetAllocation, Gifts, Usage
+from ./models import Budget, Category, BudgetAllocation, Gifts, Usage
 from rest_framework import serializers
 
 class UsageSerializer(serializers.ModelSerializer):
